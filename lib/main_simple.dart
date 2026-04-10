@@ -32,8 +32,8 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
 
     sdk.init(
       config: FlexUpConfig(
-        publicKey: 'pbk_test_123',
-        secretKey: 'pvk_test_123',
+        apiKey: 'pbk_test_123',
+        appId: 'pvk_test_123',
         environment: 'dev',
       ),
     );
@@ -52,15 +52,14 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
   }
 
   void startDeposit() async {
-    print("PaymentView build");
     setState(() => _isLoading = true);
     try {
       await sdk.deposit(
         context,
         TopUpPayload(
-          amount: 50,
+          amount: 2,
           currency: 'USD',
-          cardNumber: '4242424242424242',
+          pan: '4242424242424242',
           firstname: 'Jeremie',
           lastname: 'Mianda',
           middlename: 'Mbata',
@@ -72,9 +71,6 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
         ),
       );
     } catch (e) {
-      setState(() {
-        print('Erreur dépôt: ${e.toString()})');
-      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Erreur dépôt: ${e.toString()})'),
@@ -92,11 +88,12 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
       await sdk.transfer(
         context,
         TransferPayload(
-          amount: 30,
+          amount: 1,
           currency: 'USD',
-          cardNumber: '4111111111111111',
-          cardCvv: '123',
-          expiryDate: '12/28',
+          pan: '4111111111111111',
+          cvv: '123',
+          expMonth: "12",
+          expYear: "2028",
           firstname: 'Jeremie',
           lastname: 'Mianda',
           middlename: 'Mbata',
