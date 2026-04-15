@@ -37,7 +37,7 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
       'balance': '1,000',
       'cardNumber': '4242424242424242',
       'expiryDate': '12/25',
-      'cvv': '123',
+      'cardCvv': '123',
       'currency': 'USD',
     },
     {
@@ -45,7 +45,7 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
       'balance': '100.000',
       'cardNumber': '4242424242424243',
       'expiryDate': '12/25',
-      'cvv': '425',
+      'cardCvv': '425',
       'currency': 'CDF',
     },
     {
@@ -53,7 +53,7 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
       'balance': '400',
       'cardNumber': '4242424242424244',
       'expiryDate': '12/25',
-      'cvv': '253',
+      'cardCvv': '253',
       'currency': 'USD',
     },
   ];
@@ -67,11 +67,7 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
     super.initState();
 
     sdk.init(
-      config: FlexUpConfig(
-        apiKey: 'api_test_123',
-        appId: 'com_test_123',
-        environment: 'dev',
-      ),
+      config: FlexUpConfig(apiKey: 'api_test_123', appId: 'com_test_123'),
     );
 
     sdk.onPaymentComplete((res) {
@@ -79,7 +75,7 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
 
       setState(() {
         if (res.status == 'success') {
-          statusMessage = 'Paiement réussi ! ID: ${res.transactionId}';
+          statusMessage = 'Paiement réussi ! ID: ${res.transactionCode}';
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(res.message ?? 'Paiement réussi !'),
@@ -131,7 +127,7 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
         TopUpPayload(
           amount: 1,
           currency: 'USD',
-          pan: '4242424242424242',
+          cardNumber: '4242424242424242',
           firstname: 'Jeremie',
           lastname: 'Mianda',
           middlename: 'Mbata',
@@ -168,10 +164,9 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
         TransferPayload(
           amount: 2,
           currency: 'USD',
-          pan: '4111111111111111',
-          cvv: '123',
-          expMonth: "12",
-          expYear: "2028",
+          cardNumber: '4111111111111111',
+          cardCvv: '123',
+          expiryDate: "12/29",
           firstname: 'Jeremie',
           lastname: 'Mianda',
           middlename: 'Mbata',
@@ -183,14 +178,15 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
         ),
       );
     } catch (e) {
+      print('Erreur transfert: ${e.toString()}');
       setState(() {
-        statusMessage = "Erreur dépôt: ${e.toString()}";
+        statusMessage = "Erreur transfert: ${e.toString()}";
       });
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Erreur dépôt: ${e.toString()})'),
+          content: Text('Erreur : ${e.toString()})'),
           backgroundColor: Colors.redAccent,
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),

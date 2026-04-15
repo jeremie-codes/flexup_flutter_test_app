@@ -31,17 +31,13 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
     super.initState();
 
     sdk.init(
-      config: FlexUpConfig(
-        apiKey: 'pbk_test_123',
-        appId: 'pvk_test_123',
-        environment: 'dev',
-      ),
+      config: FlexUpConfig(apiKey: 'pbk_test_123', appId: 'pvk_test_123'),
     );
 
     sdk.onPaymentComplete((res) {
       setState(() {
         if (res.status == 'success') {
-          statusMessage = 'Paiement réussi ! ID: ${res.transactionId}';
+          statusMessage = 'Paiement réussi ! ID: ${res.transactionCode}';
         } else if (res.status == 'cancel') {
           statusMessage = 'Paiement annulé';
         } else {
@@ -59,7 +55,7 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
         TopUpPayload(
           amount: 2,
           currency: 'USD',
-          pan: '4242424242424242',
+          cardNumber: '4242424242424242',
           firstname: 'Jeremie',
           lastname: 'Mianda',
           middlename: 'Mbata',
@@ -90,10 +86,9 @@ class _TestFlexUpPageState extends State<TestFlexUpPage> {
         TransferPayload(
           amount: 1,
           currency: 'USD',
-          pan: '4111111111111111',
-          cvv: '123',
-          expMonth: "12",
-          expYear: "2028",
+          cardNumber: '4111111111111111',
+          cardCvv: '123',
+          expiryDate: "12/29",
           firstname: 'Jeremie',
           lastname: 'Mianda',
           middlename: 'Mbata',
